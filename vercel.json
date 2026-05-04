@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    {
+      "source": "/((?!api/.*).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "buildCommand": "npm run build -- --configuration production",
+  "outputDirectory": "dist/Angular-Assessment-Sashen/browser",
+  "installCommand": "npm ci"
+}
