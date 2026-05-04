@@ -4,22 +4,10 @@ import { authGuard } from '@guards/auth.guard';
 export const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'search',
-    pathMatch: 'full',
-  },
-  {
-    path: 'login',
     loadComponent: () =>
-      import('@features/auth/login.component')
-        .then((module) => module.LoginComponent),
-    title: 'Sign In — MoonBeats',
-  },
-  {
-    path: 'auth/callback',
-    loadComponent: () =>
-      import('@features/auth/callback.component')
-        .then((module) => module.CallbackComponent),
-    title: 'Signing In…',
+      import('@features/landing/landing.component')
+        .then((m) => m.LandingComponent),
+    title: 'MoonBeats',
   },
   {
     path: 'search',
