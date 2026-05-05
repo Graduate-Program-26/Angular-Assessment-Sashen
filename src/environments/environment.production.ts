@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  deezerApiBaseUrl: 'https://api.deezer.com',
+  deezerApiBaseUrl: '/api/deezer',
 } as const;
 
 Object.freeze(environment);

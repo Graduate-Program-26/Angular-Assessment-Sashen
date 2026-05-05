@@ -1,11 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/((?!api/.*).*)",
+      "source": "/api/deezer/:path*",
+      "destination": "https://api.deezer.com/:path*"
+    },
+    {
+      "source": "/((?!api).*)",
       "destination": "/index.html"
     }
-  ],
-  "buildCommand": "npm run build -- --configuration production",
-  "outputDirectory": "dist/Angular-Assessment-Sashen/browser",
-  "installCommand": "npm ci"
+  ]
 }

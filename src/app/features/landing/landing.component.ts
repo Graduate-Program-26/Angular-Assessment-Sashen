@@ -1,8 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, inject, afterNextRender } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-landing',
-  standalone: true,
-  template: `<div class="landing"></div>`,
+  standalone:  true,
+  templateUrl: './landing.component.html',
+  styleUrl: './landing.component.scss',
 })
-export class LandingComponent {}
+export class LandingComponent {
+  private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
+  private returnUrl = '/search';
+
+  constructor() {
+    afterNextRender(() => {
+      this.returnUrl =
+        this.route.snapshot.queryParamMap.get('returnUrl') ?? '/search';
+    });
+  }
+
+  protected handleEnter(): void {
+    this.authService.enterAsGuest(this.returnUrl);
+  }
+}
