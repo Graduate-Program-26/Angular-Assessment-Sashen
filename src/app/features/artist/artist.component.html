@@ -1,0 +1,58 @@
+<main class="artist-page" id="main-content">
+
+  @if (isLoading()) {
+    <div class="artist-hero-skeleton">
+      <app-skeleton-loader height="200px" borderRadius="12px" />
+      <app-skeleton-loader width="200px" height="28px" style="margin-top:1rem" />
+    </div>
+
+  } @else if (loadError()) {
+    <div class="error-state" role="alert">
+      <p>{{ loadError() }}</p>
+    </div>
+
+  } @else if (artistProfile()) {
+    @let artist = artistProfile()!;
+
+    <header class="artist-hero">
+      <img
+        class="artist-image"
+        [src]="artist.picture_xl"
+        [alt]="artist.name"
+        width="300" height="300"
+      />
+      <div>
+        <h1>{{ artist.name }}</h1>
+        <p class="fan-count">{{ fanCount() }}</p>
+        <p>{{ artist.nb_album }} albums</p>
+      </div>
+    </header>
+
+    <section aria-labelledby="discography-heading">
+      <h2 id="discography-heading">Discography</h2>
+      <ul class="album-grid" role="list">
+        @for (album of artistAlbums(); track album.id) {
+          <li>
+            <a
+              [routerLink]="['/album', album.id]"
+              class="album-card"
+              [attr.aria-label]="album.title + ' — ' + album.release_date"
+            >
+              <img
+                [src]="album.cover_medium"
+                [alt]="album.title"
+                width="200" height="200"
+                loading="lazy"
+              />
+              <p class="album-title">{{ album.title }}</p>
+              <p class="album-year">{{ album.release_date | slice:0:4 }}</p>
+            </a>
+          </li>
+        } @empty {
+          <li class="empty-state">No albums found.</li>
+        }
+      </ul>
+    </section>
+  }
+
+</main>
