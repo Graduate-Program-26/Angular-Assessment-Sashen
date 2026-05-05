@@ -1,0 +1,23 @@
+<main class="min-h-screen bg-zinc-950 flex flex-col items-center justify-center px-4" id="main-content">
+  <div class="flex flex-col items-center gap-6 text-center max-w-sm">
+    <p class="text-6xl" aria-hidden="true">🌙</p>
+    <h1 class="text-5xl font-bold text-white tracking-tight">MoonBeats</h1>
+    <p class="text-zinc-400 text-lg">Discover music. No account needed.</p>
+    <button
+      type="button"
+      class="mt-2 px-8 py-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-zinc-950"
+      (click)="handleEnter()">
+      Start exploring
+    </button>
+    <p class="text-zinc-500 text-sm">
+      Powered by the
+      <a
+        href="https://developers.deezer.com/api"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-violet-400 hover:text-violet-300 underline underline-offset-2">
+        Deezer public API
+      </a>
+    </p>
+  </div>
+</main>
