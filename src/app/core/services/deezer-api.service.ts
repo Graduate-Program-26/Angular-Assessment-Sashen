@@ -1,62 +1,70 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, retry, timeout } from 'rxjs/operators';
+import { retry, timeout } from 'rxjs/operators';
 import { ENVIRONMENT_CONFIG } from '@core/tokens/environment.token';
-import type { Track } from '@models/track.model';
+import type { DeezerTrack } from '@models/track.model';
+import type { DeezerArtist } from '@models/artist.model';
+import type { DeezerAlbum } from '@models/album.model';
+import type { DeezerListResponse } from '@models/api-response.model';
 
-/** Deezer wraps errors in a 200 response body */
-interface DeezerErrorBody {
-  error: { type: string; message: string; code: number };
-}
-
-export interface DeezerArtist {
-  readonly id:             number;
-  readonly name:           string;
-  readonly picture_medium: string;
-  readonly nb_fan:         number;
-  readonly nb_album:       number;
-}
-
-export interface DeezerSearchResult {
-  readonly data:  Track[];
-  readonly total: number;
-  readonly next?: string;
-}
+const REQUEST_TIMEOUT_MS = 10_000;
+const RETRY_COUNT = 2;
 
 @Injectable({ providedIn: 'root' })
 export class DeezerApiService {
-  private readonly http    = inject(HttpClient);
-  private readonly env     = inject(ENVIRONMENT_CONFIG);
-  private readonly baseUrl = this.env.deezerApiBaseUrl;
 
-  private throwIfDeezerError<T>() {
-    return map((res: T | DeezerErrorBody): T => {
-      if (res && typeof res === 'object' && 'error' in res) {
-        const err = (res as DeezerErrorBody).error;
-        throw new Error(`Deezer error ${err.code}: ${err.message}`);
-      }
-      return res as T;
-    });
+  private readonly httpClient = inject(HttpClient);
+  private readonly baseUrl    = inject(ENVIRONMENT_CONFIG).deezerApiBaseUrl;
+
+  private withDefaults<T>() {
+    return (source$: Observable<T>): Observable<T> =>
+      source$.pipe(
+        timeout(REQUEST_TIMEOUT_MS),
+        retry({ count: RETRY_COUNT, delay: 1000 }),
+      );
   }
 
-  /** Applies a request timeout and one automatic retry */
-  private withDefaults<T>() {
-    return (source: Observable<T>): Observable<T> =>
-      source.pipe(timeout(10_000), retry(1));
+  searchTracks(searchQuery: string): Observable<DeezerListResponse<DeezerTrack>> {
+    return this.httpClient
+      .get<DeezerListResponse<DeezerTrack>>(
+        `${this.baseUrl}/search`,
+        { params: { q: searchQuery } },
+      )
+      .pipe(this.withDefaults());
   }
 
   fetchArtistById(artistId: string): Observable<DeezerArtist> {
-    return this.http
-      .get<DeezerArtist | DeezerErrorBody>(`${this.baseUrl}/artist/${artistId}`)
-      .pipe(this.throwIfDeezerError(), this.withDefaults());
+    return this.httpClient
+      .get<DeezerArtist>(`${this.baseUrl}/artist/${artistId}`)
+      .pipe(this.withDefaults());
   }
 
-  search(query: string): Observable<DeezerSearchResult> {
-    return this.http
-      .get<DeezerSearchResult | DeezerErrorBody>(`${this.baseUrl}/search`, {
-        params: { q: query },
-      })
-      .pipe(this.throwIfDeezerError(), this.withDefaults());
+  fetchArtistAlbums(artistId: string): Observable<DeezerListResponse<DeezerAlbum>> {
+    return this.httpClient
+      .get<DeezerListResponse<DeezerAlbum>>(
+        `${this.baseUrl}/artist/${artistId}/albums`
+      )
+      .pipe(this.withDefaults());
+  }
+
+  fetchAlbumById(albumId: string): Observable<DeezerAlbum> {
+    return this.httpClient
+      .get<DeezerAlbum>(`${this.baseUrl}/album/${albumId}`)
+      .pipe(this.withDefaults());
+  }
+
+  fetchAlbumTracks(albumId: string): Observable<DeezerListResponse<DeezerTrack>> {
+    return this.httpClient
+      .get<DeezerListResponse<DeezerTrack>>(
+        `${this.baseUrl}/album/${albumId}/tracks`
+      )
+      .pipe(this.withDefaults());
+  }
+
+  fetchTrackById(trackId: string): Observable<DeezerTrack> {
+    return this.httpClient
+      .get<DeezerTrack>(`${this.baseUrl}/track/${trackId}`)
+      .pipe(this.withDefaults());
   }
 }

@@ -1,10 +1,10 @@
 import { Injectable, signal, computed } from '@angular/core';
-import type { Track } from '@models/track.model';
+import type { DeezerTrack } from '@models/track.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerStore {
 
-  private readonly _currentTrack    = signal<Track | null>(null);
+  private readonly _currentTrack    = signal<DeezerTrack | null>(null);
   private readonly _isPlaying        = signal<boolean>(false);
   private readonly _volume           = signal<number>(75);
   private readonly _currentTimeMs    = signal<number>(0);
@@ -20,7 +20,7 @@ export class PlayerStore {
     return track ? `${track.title} — ${track.artist.name}` : 'Nothing playing';
   });
 
-  loadTrack(trackToPlay: Track): void {
+  loadTrack(trackToPlay: DeezerTrack): void {
     this._currentTrack.set(trackToPlay);
     this._currentTimeMs.set(0);
     this._isPlaying.set(true);
