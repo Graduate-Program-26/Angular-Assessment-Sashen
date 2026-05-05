@@ -1,0 +1,53 @@
+<header class="navbar" role="banner">
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="navbar-inner">
+
+    <a
+      routerLink="/search"
+      class="navbar-brand"
+      aria-label="MoonBeats — go to search"
+    >
+      <span aria-hidden="true">🌙</span>
+      <span class="brand-text">MoonBeats</span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <ul class="nav-links" role="list">
+        <li>
+          <a
+            routerLink="/search"
+            routerLinkActive="active"
+            aria-label="Search music"
+          >Search</a>
+        </li>
+        <li>
+          <a
+            routerLink="/playlists"
+            routerLinkActive="active"
+            aria-label="Your playlists"
+          >Playlists</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="navbar-actions">
+      @if (authService.isAuthenticated()) {
+        @let currentUser = authService.currentUser();
+        @if (currentUser) {
+          <span class="user-avatar" aria-hidden="true">{{ currentUser.initial }}</span>
+        }
+        <button
+          type="button"
+          class="logout-button"
+          (click)="handleLogout()"
+          aria-label="Sign out"
+        >
+          Sign out
+        </button>
+      }
+    </div>
+
+  </div>
+</header>

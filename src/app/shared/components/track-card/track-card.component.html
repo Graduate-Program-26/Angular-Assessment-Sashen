@@ -1,0 +1,45 @@
+<article
+  class="track-card"
+  [class.track-card--playing]="isCurrentlyPlaying()"
+  role="listitem"
+>
+
+  @if (trackNumber() !== null) {
+    <span class="track-num" aria-label="Track {{ trackNumber() }}">
+      {{ trackNumber() }}
+    </span>
+  }
+
+  <img
+    class="track-art"
+    [src]="track().album.cover_small"
+    [alt]="track().album.title"
+    width="40"
+    height="40"
+    loading="lazy"
+  />
+
+  <div class="track-info">
+    <p class="track-title">{{ track().title | truncate:40 }}</p>
+    <p class="track-artist">{{ track().artist.name }}</p>
+  </div>
+
+  <span class="track-duration" aria-label="Duration: {{ track().duration | duration }}">
+    {{ track().duration | duration }}
+  </span>
+
+  <button
+    type="button"
+    class="play-btn"
+    (click)="handlePlayClick()"
+    [attr.aria-label]="'Play ' + track().title + ' by ' + track().artist.name"
+    [attr.aria-pressed]="isCurrentlyPlaying()"
+  >
+    @if (isCurrentlyPlaying()) {
+      <span aria-hidden="true">⏸</span>
+    } @else {
+      <span aria-hidden="true">▶</span>
+    }
+  </button>
+
+</article>
