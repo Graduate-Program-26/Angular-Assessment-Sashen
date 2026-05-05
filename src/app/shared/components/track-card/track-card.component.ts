@@ -1,8 +1,8 @@
 import { Component, input, computed, inject } from '@angular/core';
-import { DurationPipe } from '../../pipes/duration.pipe';
-import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { DurationPipe } from '@shared/pipes/duration.pipe';
+import { TruncatePipe } from '@shared/pipes/truncate.pipe';
 import { PlayerStore } from '@store/player.store';
-import type { Track } from '@models/track.model';
+import type { DeezerTrack } from '@models/track.model';
 
 @Component({
   selector: 'app-track-card',
@@ -13,8 +13,8 @@ import type { Track } from '@models/track.model';
 })
 export class TrackCardComponent {
 
-  readonly track = input.required<Track>();
-  readonly trackNumber = input<number | null>(null); 
+  readonly track = input.required<DeezerTrack>();
+  readonly trackNumber = input<number | null>(null);
 
   private readonly playerStore = inject(PlayerStore);
 
