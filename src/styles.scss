@@ -57,3 +57,32 @@ body {
     animation: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-new(root),
+  ::view-transition-old(root) {
+    animation: none;
+  }
+}
+
+.now-playing-bars .bar {
+  animation: none; 
+}
+
+.track-card--playing .now-playing-bars .bar {
+  animation: now-playing-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes now-playing-pulse {
+  from { height: 3px; }
+  to   { height: 10px; }
+}
