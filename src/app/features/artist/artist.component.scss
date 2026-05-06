@@ -1,0 +1,114 @@
+.artist-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 6rem;
+
+  @media (max-width: 640px) { padding: 1.5rem 1rem 6rem; }
+}
+
+.artist-hero-skeleton { padding: 1rem 0; }
+
+.artist-hero {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-bottom: 3rem;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+}
+
+.artist-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #18181f;
+  box-shadow: 0 0 40px rgba(200,169,110,0.15);
+
+  @media (max-width: 640px) { width: 140px; height: 140px; }
+}
+
+.artist-hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #e8e6e0;
+  margin: 0 0 0.5rem;
+
+  @media (max-width: 640px) { font-size: 1.75rem; }
+}
+
+.fan-count {
+  font-size: 0.9rem;
+  color: #7a7890;
+  margin: 0 0 0.25rem;
+}
+
+.artist-hero p { margin: 0; color: #7a7890; font-size: 0.9rem; }
+
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e8e6e0;
+  margin: 0 0 1.25rem;
+}
+
+.album-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.5rem;
+
+  @media (max-width: 640px) { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem; }
+}
+
+.album-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  border-radius: 10px;
+  padding: 0.5rem;
+  transition: background 0.15s;
+
+  &:hover { background: #18181f; }
+
+  img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #18181f;
+  }
+}
+
+.album-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #e8e6e0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-year {
+  font-size: 0.78rem;
+  color: #7a7890;
+  margin: 0;
+}
+
+.empty-state, .error-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #7a7890;
+}
