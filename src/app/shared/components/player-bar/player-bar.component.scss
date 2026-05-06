@@ -14,17 +14,33 @@
   &--visible { transform: translateY(0); }
 }
 
-.progress-track {
-  height: 2px;
+.seek-bar,
+.volume-bar {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 2px;
   background: #2a2a3a;
   cursor: pointer;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #c8a96e;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  &:hover::-webkit-slider-thumb { transform: scale(1.2); }
+  &:focus-visible { outline: 2px solid #c8a96e; outline-offset: 3px; }
 }
 
-.progress-fill {
-  height: 100%;
-  background: #c8a96e;
-  width: 0%;
-  transition: width 0.1s linear;
+.seek-bar {
+  display: block;
+  width: 100%;
 }
 
 .player-inner {
