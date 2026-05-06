@@ -4,7 +4,13 @@
   role="listitem"
 >
 
-  @if (trackNumber() !== null) {
+  @if (isCurrentlyPlaying()) {
+    <div class="now-playing-bars" aria-hidden="true">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+  } @else if (trackNumber() !== null) {
     <span class="track-num" aria-label="Track {{ trackNumber() }}">
       {{ trackNumber() }}
     </span>
