@@ -1,0 +1,92 @@
+<main class="playlist-page" id="main-content">
+
+  <header class="playlist-header">
+    <h1 class="page-title">Your Playlists</h1>
+
+    <form class="create-form" [formGroup]="createForm" (ngSubmit)="handleCreateSubmit()">
+      <label for="playlist-name-input" class="sr-only">New playlist name</label>
+      <input
+        id="playlist-name-input"
+        formControlName="playlistName"
+        type="text"
+        class="playlist-name-input"
+        placeholder="New playlist name…"
+        maxlength="60"
+        autocomplete="off"
+      />
+      <button
+        type="submit"
+        class="create-btn"
+        [disabled]="createForm.invalid"
+      >Create</button>
+    </form>
+  </header>
+
+  @if (playlistStore.isLoading()) {
+    <p class="loading-text">Loading playlists…</p>
+
+  } @else if (playlistStore.playlists().length === 0) {
+    <section class="empty-state">
+      <p class="empty-icon" aria-hidden="true">🎵</p>
+      <p>No playlists yet. Create your first one above.</p>
+    </section>
+
+  } @else {
+    <div class="playlist-layout">
+
+      <aside class="playlist-sidebar" aria-label="Playlists">
+        <ul class="playlist-list" role="list">
+          @for (playlist of playlistStore.playlists(); track playlist.id) {
+            <li
+              class="playlist-item"
+              [class.playlist-item--active]="playlistStore.activeId() === playlist.id"
+            >
+              <button
+                type="button"
+                class="playlist-select-btn"
+                (click)="handleSelectPlaylist(playlist.id)"
+                [attr.aria-current]="playlistStore.activeId() === playlist.id ? 'true' : null"
+              >
+                <span class="playlist-name">{{ playlist.name }}</span>
+                <span class="playlist-meta">{{ playlist.tracks.length }} tracks</span>
+              </button>
+              <button
+                type="button"
+                class="playlist-delete-btn"
+                (click)="handleDeletePlaylist(playlist.id)"
+                [attr.aria-label]="'Delete ' + playlist.name"
+              >✕</button>
+            </li>
+          }
+        </ul>
+      </aside>
+
+      <section class="playlist-detail" aria-label="Playlist tracks">
+        @if (playlistStore.activePlaylist(); as active) {
+          <header class="detail-header">
+            <h2 class="detail-title">{{ active.name }}</h2>
+            <p class="detail-meta">
+              {{ active.tracks.length }} tracks · {{ playlistStore.activeDuration() | duration }}
+            </p>
+          </header>
+
+          @if (active.tracks.length === 0) {
+            <p class="empty-tracks">Add tracks from search or album pages.</p>
+          } @else {
+            <ul class="track-list" role="list">
+              @for (track of active.tracks; track track.id; let i = $index) {
+                <li>
+                  <app-track-card [track]="track" [trackNumber]="i + 1" />
+                </li>
+              }
+            </ul>
+          }
+        } @else {
+          <p class="select-prompt">Select a playlist to view its tracks.</p>
+        }
+      </section>
+
+    </div>
+  }
+
+</main>
