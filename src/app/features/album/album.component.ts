@@ -49,7 +49,9 @@ export class AlbumComponent {
         firstValueFrom(this.deezerApiService.fetchAlbumTracks(id)),
       ]);
       this.albumDetails.set(albumData);
-      this.trackList.set(trackData.data);
+      // Deezer's /album/{id}/tracks response omits the album field — enrich it
+      const albumRef = { id: albumData.id, title: albumData.title, cover_small: albumData.cover_small, cover_medium: albumData.cover_medium };
+      this.trackList.set(trackData.data.map((t) => ({ ...t, album: albumRef })));
     } catch {
       this.loadError.set('Could not load album. Please try again.');
     } finally {
