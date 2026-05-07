@@ -81,8 +81,21 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  object-fit: cover;
+  background: linear-gradient(135deg, #c8a96e, #7c9ef5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0a0a0f;
+  flex-shrink: 0;
   border: 2px solid #2a2a3a;
+
+  &--photo {
+    object-fit: cover;
+    background: #2a2a3a;
+    display: block;
+  }
 }
 
 .logout-button {

@@ -1,11 +1,25 @@
 <main class="profile-page" id="main-content">
 
   <header class="profile-header">
-    <div class="avatar" aria-hidden="true">
-      {{ authService.currentUser()?.initial }}
-    </div>
-    <h1>{{ authService.currentUser()?.displayName }}</h1>
-    <p class="profile-sub">Listening locally - no account needed</p>
+    @if (authService.currentUser(); as user) {
+      @if (user.picture) {
+        <img
+          class="avatar avatar--photo"
+          [src]="user.picture"
+          [alt]="user.name + ' avatar'"
+          width="80" height="80"
+          referrerpolicy="no-referrer"
+        />
+      } @else {
+        <div class="avatar" aria-hidden="true">{{ user.initial }}</div>
+      }
+      <h1>{{ user.name }}</h1>
+      <p class="profile-sub">{{ user.email }}</p>
+    }
+
+    <button type="button" class="logout-btn" (click)="authService.logout()">
+      Sign out
+    </button>
   </header>
 
   <section class="stats-grid" aria-labelledby="stats-heading">
