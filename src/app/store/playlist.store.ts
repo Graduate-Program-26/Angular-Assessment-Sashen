@@ -2,6 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { moonBeatsDb } from '@core/database/moonbeats.db';
 import type { Playlist, PlaylistDraft } from '@models/playlist.model';
 import type { DeezerTrack } from '@models/track.model';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistStore {
@@ -106,4 +107,22 @@ export class PlaylistStore {
   setActivePlaylist(playlistId: string | null): void {
     this._activeId.set(playlistId);
   }
+  async reorderTracks(
+    playlistId: string,
+    previousIndex: number,
+    currentIndex: number
+  ): Promise<void> {
+    const target = this._playlists().find((pl) => pl.id === playlistId);
+    if (!target) return;
+
+    const reordered = [...target.tracks];
+    moveItemInArray(reordered, previousIndex, currentIndex);
+
+    const updatedAt = Date.now();
+    await moonBeatsDb.playlists.update(playlistId, { tracks: reordered, updatedAt });
+    this._playlists.update((pls) =>
+      pls.map((pl) => pl.id === playlistId ? { ...pl, tracks: reordered, updatedAt } : pl)
+    );
+  }
+  
 }

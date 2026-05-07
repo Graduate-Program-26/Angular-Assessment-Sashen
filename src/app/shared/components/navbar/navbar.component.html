@@ -5,9 +5,9 @@
   <div class="navbar-inner">
 
     <a
-      routerLink="/search"
+      routerLink="/home"
       class="navbar-brand"
-      aria-label="MoonBeats — go to search"
+      aria-label="MoonBeats — go to home"
     >
       <span aria-hidden="true">🌙</span>
       <span class="brand-text">MoonBeats</span>
@@ -15,6 +15,13 @@
 
     <nav aria-label="Main navigation">
       <ul class="nav-links" role="list">
+        <li>
+          <a
+            routerLink="/home"
+            routerLinkActive="active"
+            aria-label="Home"
+          >Home</a>
+        </li>
         <li>
           <a
             routerLink="/search"
@@ -28,6 +35,13 @@
             routerLinkActive="active"
             aria-label="Your playlists"
           >Playlists</a>
+        </li>
+        <li>
+          <a
+            routerLink="/liked"
+            routerLinkActive="active"
+            aria-label="Liked songs"
+          >Liked</a>
         </li>
       </ul>
     </nav>

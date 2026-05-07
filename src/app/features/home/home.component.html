@@ -1,0 +1,65 @@
+<main class="home-page" id="main-content">
+
+  <!-- Recently played quick-grid -->
+  @if (recentStore.hasRecent()) {
+    <section class="section" aria-labelledby="recent-heading">
+      <h2 id="recent-heading" class="section-title">Recently played</h2>
+      <ul class="quick-grid" role="list">
+        @for (track of recentStore.tracks().slice(0, 6); track track.id) {
+          <li class="quick-item" (click)="playTrack(track)" role="button" tabindex="0"
+              (keydown.enter)="playTrack(track)"
+              [attr.aria-label]="'Play ' + track.title">
+            <img class="quick-art" [src]="track.album.cover_small" [alt]="track.album.title" width="48" height="48" />
+            <span class="quick-title">{{ track.title }}</span>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <!-- Top tracks shelf -->
+  <section class="section" aria-labelledby="charts-heading">
+    <h2 id="charts-heading" class="section-title">Top tracks today</h2>
+    @if (isLoading()) {
+      <ul class="shelf" role="list" aria-label="Loading tracks">
+        @for (n of skeletons; track n) {
+          <li class="card card--skeleton">
+            <div class="card-art skeleton-box"></div>
+            <div class="skeleton-line" style="width:70%"></div>
+            <div class="skeleton-line" style="width:45%"></div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <ul class="shelf" role="list">
+        @for (track of chartTracks(); track track.id) {
+          <li class="card" (click)="playTrack(track)" role="button" tabindex="0"
+              (keydown.enter)="playTrack(track)"
+              [attr.aria-label]="'Play ' + track.title + ' by ' + track.artist.name">
+            <img class="card-art" [src]="track.album.cover_medium" [alt]="track.album.title" loading="lazy" />
+            <p class="card-title">{{ track.title }}</p>
+            <p class="card-sub">{{ track.artist.name }}</p>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <!-- Browse genres -->
+  <section class="section" aria-labelledby="genres-heading">
+    <h2 id="genres-heading" class="section-title">Browse categories</h2>
+    <ul class="genre-grid" role="list">
+      @for (genre of genres(); track genre.id) {
+        <li>
+          <a [routerLink]="['/search']" [queryParams]="{ genreId: genre.id, genreName: genre.name }" class="genre-card">
+            @if (genre.picture) {
+              <img class="genre-img" [src]="genre.picture" [alt]="genre.name" loading="lazy" />
+            }
+            <span class="genre-name">{{ genre.name }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+
+</main>

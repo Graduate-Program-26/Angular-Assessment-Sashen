@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { PlayerStore } from '@store/player.store';
-import { DurationPipe } from '@shared/pipes/duration.pipe';
 
 @Component({
   selector: 'app-player-bar',
   standalone: true,
-  imports: [DurationPipe, DecimalPipe],
+  imports: [DecimalPipe],
   templateUrl: './player-bar.component.html',
   styleUrl: './player-bar.component.scss',
 })

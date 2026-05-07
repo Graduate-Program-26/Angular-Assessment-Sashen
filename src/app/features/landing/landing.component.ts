@@ -11,12 +11,12 @@ import { AuthService } from '@core/services/auth.service';
 export class LandingComponent {
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
-  private returnUrl = '/search';
+  private returnUrl = '/home';
 
   constructor() {
     afterNextRender(() => {
       this.returnUrl =
-        this.route.snapshot.queryParamMap.get('returnUrl') ?? '/search';
+        this.route.snapshot.queryParamMap.get('returnUrl') ?? '/home';
     });
   }
 
