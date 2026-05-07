@@ -10,27 +10,24 @@
     <input
       type="range"
       class="seek-bar"
-      min="0"
-      max="100"
-      step="0.1"
+      min="0" max="100" step="0.1"
       [value]="playerStore.progressPct()"
+      [style.--pct]="playerStore.progressPct() + '%'"
       (input)="handleSeek($event)"
       [attr.aria-label]="'Seek — ' + playerStore.playerLabel()"
       [attr.aria-valuenow]="playerStore.progressPct() | number:'1.0-0'"
-      aria-valuemin="0"
-      aria-valuemax="100"
+      aria-valuemin="0" aria-valuemax="100"
     />
 
     <div class="player-inner">
 
+      <!-- Track info -->
       <div class="track-info">
         @if (currentTrack) {
-          <img
-            class="track-art"
+          <img class="track-art"
             [src]="currentTrack.album.cover_small"
             [alt]="currentTrack.album.title + ' album art'"
-            width="40"
-            height="40"
+            width="40" height="40"
           />
           <div class="track-meta">
             <p class="track-title">{{ currentTrack.title }}</p>
@@ -39,11 +36,20 @@
         }
       </div>
 
+      <!-- Playback controls -->
       <div class="player-controls" role="group" aria-label="Playback controls">
-        <button
-          type="button"
-          class="play-pause-btn"
-          (click)="handlePlayPauseClick()"
+        <button type="button" class="ctrl-btn"
+          (click)="playerStore.playPrevious()"
+          [disabled]="!playerStore.hasPrevious()"
+          aria-label="Previous track"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/>
+          </svg>
+        </button>
+
+        <button type="button" class="play-pause-btn"
+          (click)="playerStore.togglePlayback()"
           [attr.aria-label]="playerStore.isPlaying() ? 'Pause' : 'Play'"
           [attr.aria-pressed]="playerStore.isPlaying()"
         >
@@ -54,12 +60,21 @@
           }
         </button>
 
-        <input
-          type="range"
-          class="volume-bar"
-          min="0"
-          max="100"
-          step="1"
+        <button type="button" class="ctrl-btn"
+          (click)="playerStore.playNext()"
+          [disabled]="!playerStore.hasNext()"
+          aria-label="Next track"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Volume -->
+      <div class="player-right">
+        <input type="range" class="volume-bar"
+          min="0" max="100" step="1"
           [value]="playerStore.volume()"
           (input)="handleVolumeChange($event)"
           aria-label="Volume"
