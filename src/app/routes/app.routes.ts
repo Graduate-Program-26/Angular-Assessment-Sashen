@@ -34,12 +34,36 @@ export const appRoutes: Routes = [
     title: 'Album — MoonBeats',
   },
   {
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('@features/home/home.component')
+        .then((m) => m.HomeComponent),
+    title: 'Home — MoonBeats',
+  },
+  {
     path: 'playlists',
     canActivate: [authGuard],
     loadComponent: () =>
       import('@features/playlist/playlist.component')
         .then((module) => module.PlaylistComponent),
     title: 'Playlists — MoonBeats',
+  },
+  {
+    path: 'liked',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('@features/liked/liked.component')
+        .then((m) => m.LikedComponent),
+    title: 'Liked Songs — MoonBeats',
+  },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('@features/profile/profile.component')
+        .then((m) => m.ProfileComponent),
+    title: 'Profile — MoonBeats',
   },
   {
     path: '**',
