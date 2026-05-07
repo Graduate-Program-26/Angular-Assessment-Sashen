@@ -14,15 +14,21 @@ export class PlayerStore {
   );
   private readonly _currentTimeMs = signal<number>(0);
   private readonly _durationMs = signal<number>(30_000);
+  private readonly _queue = signal<readonly DeezerTrack[]>([]);
+  private readonly _queueIndex = signal<number>(-1);
+  private readonly _shuffle = signal<boolean>(false);
 
-  // Public readonly signals
-  readonly currentTrack  = this._currentTrack.asReadonly();
+  // Public readonly signals 
+  readonly currentTrack = this._currentTrack.asReadonly();
   readonly isPlaying = this._isPlaying.asReadonly();
   readonly volume = this._volume.asReadonly();
   readonly currentTimeMs = this._currentTimeMs.asReadonly();
   readonly durationMs = this._durationMs.asReadonly();
+  readonly queue = this._queue.asReadonly();
+  readonly queueIndex = this._queueIndex.asReadonly();
+  readonly shuffle = this._shuffle.asReadonly();
 
-  // Computed Signals
+  // Computed signals
   readonly hasActiveTrack = computed(() => this._currentTrack() !== null);
   readonly progressPct = computed(() =>
     this._durationMs() > 0
@@ -31,10 +37,10 @@ export class PlayerStore {
   );
   readonly playerLabel = computed(() => {
     const track = this._currentTrack();
-    return track
-      ? `${track.title} — ${track.artist.name}`
-      : 'Nothing playing';
+    return track ? `${track.title} — ${track.artist.name}` : 'Nothing playing';
   });
+  readonly hasNext = computed(() => this._queueIndex() < this._queue().length - 1);
+  readonly hasPrevious = computed(() => this._queueIndex() > 0);
 
   // Audio element 
   private readonly audioElement = new Audio();
@@ -42,8 +48,6 @@ export class PlayerStore {
   constructor() {
     this.audioElement.volume = this._volume() / 100;
 
-    /* effect() keeps the audio element in sync with signal state.
-     * When _isPlaying changes: play or pause the audio.*/
     effect(() => {
       if (this._isPlaying()) {
         void this.audioElement.play();
@@ -52,35 +56,79 @@ export class PlayerStore {
       }
     });
 
-    // Persist volume whenever it changes
     effect(() => {
       const volumeLevel = this._volume();
       this.audioElement.volume = volumeLevel / 100;
       localStorage.setItem(VOLUME_STORAGE_KEY, String(volumeLevel));
     });
 
-    // Update currentTimeMs from audio element timeupdate event 
     this.audioElement.addEventListener('timeupdate', () => {
       this._currentTimeMs.set(this.audioElement.currentTime * 1_000);
-    });
-
-    this.audioElement.addEventListener('ended', () => {
-      this._isPlaying.set(false);
-      this._currentTimeMs.set(0);
     });
 
     this.audioElement.addEventListener('loadedmetadata', () => {
       this._durationMs.set(this.audioElement.duration * 1_000);
     });
+
+    this.audioElement.addEventListener('ended', () => {
+      if (this.hasNext()) {
+        this.playNext();
+      } else {
+        this._isPlaying.set(false);
+        this._currentTimeMs.set(0);
+      }
+    });
   }
 
-  // Mutators
-  loadTrack(trackToPlay: DeezerTrack): void {
-    this.audioElement.src = trackToPlay.preview;
+  private queueAt(idx: number): DeezerTrack | undefined {
+    const q = this._queue();
+    return idx >= 0 && idx < q.length ? q[idx] : undefined;
+  }
+
+  loadTrack(track: DeezerTrack, queue: readonly DeezerTrack[] = []): void {
+    if (queue.length > 0) {
+      this._queue.set(queue);
+      this._queueIndex.set(queue.findIndex((t) => t.id === track.id));
+    }
+    this.audioElement.src = track.preview;
     this.audioElement.load();
-    this._currentTrack.set(trackToPlay);
+    this._currentTrack.set(track);
     this._currentTimeMs.set(0);
     this._isPlaying.set(true);
+  }
+
+  playNext(): void {
+    if (this._shuffle()) {
+      const idx = Math.floor(Math.random() * this._queue().length);
+      const track = this.queueAt(idx);
+      if (track === undefined) return;
+      this._queueIndex.set(idx);
+      this.loadTrack(track);
+      return;
+    }
+    if (!this.hasNext()) return;
+    const nextIdx = this._queueIndex() + 1;
+    const nextTrack = this.queueAt(nextIdx);
+    if (nextTrack === undefined) return;
+    this._queueIndex.set(nextIdx);
+    this.loadTrack(nextTrack);
+  }
+
+  playPrevious(): void {
+    if (!this.hasPrevious()) return;
+    const prevIdx = this._queueIndex() - 1;
+    const prevTrack = this.queueAt(prevIdx);
+    if (prevTrack === undefined) return;
+    this._queueIndex.set(prevIdx);
+    this.loadTrack(prevTrack);
+  }
+
+  addToQueue(track: DeezerTrack): void {
+    this._queue.update((q) => [...q, track]);
+  }
+
+  toggleShuffle(): void {
+    this._shuffle.update((s) => !s);
   }
 
   togglePlayback(): void {
