@@ -69,6 +69,23 @@ export class SearchStore {
     this.searchSubject$.next(newQuery);
   }
 
+  loadGenreTracks(genreId: string, genreName: string): void {
+    this._searchQuery.set(genreName);
+    this._isSearching.set(true);
+    this._searchError.set(null);
+    this.deezerApiService.fetchChartTracksByGenre(genreId).subscribe({
+      next: (res) => {
+        this._searchResults.set(res.data);
+        this._totalResults.set(res.total);
+        this._isSearching.set(false);
+      },
+      error: () => {
+        this._searchError.set('Could not load genre tracks. Please try again.');
+        this._isSearching.set(false);
+      },
+    });
+  }
+
   clearSearch(): void {
     this._searchQuery.set('');
     this._searchResults.set([]);

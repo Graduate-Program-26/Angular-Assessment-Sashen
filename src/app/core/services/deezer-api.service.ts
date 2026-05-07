@@ -7,6 +7,8 @@ import type { DeezerTrack } from '@models/track.model';
 import type { DeezerArtist } from '@models/artist.model';
 import type { DeezerAlbum } from '@models/album.model';
 import type { DeezerListResponse } from '@models/api-response.model';
+import type { DeezerGenre } from '@models/genre.model';
+import type { DeezerPodcast } from '@models/podcast.model';
 
 const REQUEST_TIMEOUT_MS = 10_000;
 const RETRY_COUNT = 2;
@@ -43,7 +45,7 @@ export class DeezerApiService {
   fetchArtistAlbums(artistId: string): Observable<DeezerListResponse<DeezerAlbum>> {
     return this.httpClient
       .get<DeezerListResponse<DeezerAlbum>>(
-        `${this.baseUrl}/artist/${artistId}/albums`
+        `${this.baseUrl}/artist/${artistId}/albums`,
       )
       .pipe(this.withDefaults());
   }
@@ -57,7 +59,7 @@ export class DeezerApiService {
   fetchAlbumTracks(albumId: string): Observable<DeezerListResponse<DeezerTrack>> {
     return this.httpClient
       .get<DeezerListResponse<DeezerTrack>>(
-        `${this.baseUrl}/album/${albumId}/tracks`
+        `${this.baseUrl}/album/${albumId}/tracks`,
       )
       .pipe(this.withDefaults());
   }
@@ -65,6 +67,30 @@ export class DeezerApiService {
   fetchTrackById(trackId: string): Observable<DeezerTrack> {
     return this.httpClient
       .get<DeezerTrack>(`${this.baseUrl}/track/${trackId}`)
+      .pipe(this.withDefaults());
+  }
+
+  fetchChartTracks(): Observable<DeezerListResponse<DeezerTrack>> {
+    return this.httpClient
+      .get<DeezerListResponse<DeezerTrack>>(`${this.baseUrl}/chart/0/tracks`)
+      .pipe(this.withDefaults());
+  }
+
+  fetchGenres(): Observable<DeezerListResponse<DeezerGenre>> {
+    return this.httpClient
+      .get<DeezerListResponse<DeezerGenre>>(`${this.baseUrl}/genre`)
+      .pipe(this.withDefaults());
+  }
+
+  fetchChartTracksByGenre(genreId: string): Observable<DeezerListResponse<DeezerTrack>> {
+    return this.httpClient
+      .get<DeezerListResponse<DeezerTrack>>(`${this.baseUrl}/chart/${genreId}/tracks`)
+      .pipe(this.withDefaults());
+  }
+
+  fetchChartPodcasts(): Observable<DeezerListResponse<DeezerPodcast>> {
+    return this.httpClient
+      .get<DeezerListResponse<DeezerPodcast>>(`${this.baseUrl}/chart/0/podcasts`)
       .pipe(this.withDefaults());
   }
 }
