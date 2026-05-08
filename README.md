@@ -6,11 +6,7 @@ A Spotify/Lofi mix inspired music app. Browse chart tracks, search artists and a
 
 ## Live demo
 
-> 🚀 Coming soon - will be deployed to Vercel once `dev` is merged into `main`.
-
-<!-- Once live, replace the line above with:
-**[moonbeats.vercel.app](https://moonbeats.vercel.app)**
--->
+> 🚀 live version of dev https://angular-assessment-sashen.vercel.app/
 
 ---
 
@@ -90,23 +86,21 @@ A Spotify/Lofi mix inspired music app. Browse chart tracks, search artists and a
 
 ### State management - why Signals over NgRx
 
-**Signals** (`signal()`, `computed()`, `effect()`) were chosen as the state management approach instead of NgRx.
+**Signals** (signal, computed, effect) were chosen as the state management approach instead of NgRx.
 
 The app's state i implemented since i have a list of playlists, liked songs, and search results. NgRx would have required actions, reducers, selectors, and effects for every one of those a large amount of boilerplate for state would be needed. Signals let each store be a plain Injectable service that owns its own state, is easy to read.
 
 **Advantages of Signals**
 - No boilerplate - no actions, reducers, or selectors to wire up
-- State lives close to where it is used; each store is a single readable file
+- State lives close to where it is used, each store is a single readable file
 - computed replaces selectors with zero setup
-- effect handles side effects (syncing audio element, persisting to IndexedDB) declaratively
+- effect handles side effects (syncing audio element, persisting to IndexedDB)
 
 **Disadvantages**
 - No built in devtools for time-travel debugging
 - No enforced unidirectional data flow
-- RxJS still needed at the boundary where third-party libraries emit observables (Auth0 uses isAuthenticated$, user$), toSignal was used to bridge those into the signal graph without spreading RxJS further into the app
+- RxJS still needed at the boundary where third-party libraries emit observables (Auth0 uses isAuthenticated, user), toSignal was used to kinda bridge without spreading RxJS further into the app
 
-**Why RxJS was not removed entirely**
-Auth0's Angular SDK exposes its state as RxJS observables. Rather than rewriting that integration, `toSignal()` was used at the `AuthService` boundary to convert those streams into signals once, keeping the rest of the app fully signal-based.
 
 ---
 
