@@ -50,7 +50,17 @@
       @if (authService.isAuthenticated()) {
         @let currentUser = authService.currentUser();
         @if (currentUser) {
-          <span class="user-avatar" aria-hidden="true">{{ currentUser.initial }}</span>
+          @if (currentUser.picture) {
+            <img
+              class="user-avatar user-avatar--photo"
+              [src]="currentUser.picture"
+              [alt]="currentUser.name"
+              width="32" height="32"
+              referrerpolicy="no-referrer"
+            />
+          } @else {
+            <span class="user-avatar" aria-hidden="true">{{ currentUser.initial }}</span>
+          }
         }
         <button
           type="button"

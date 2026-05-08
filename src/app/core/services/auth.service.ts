@@ -1,28 +1,43 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
-import { Router } from '@angular/router';
-import type { AuthState, GuestUser } from '@models/auth.model';
-
-const GUEST_USER: GuestUser = { displayName: 'Guest', initial: 'S' };
+import { Injectable, inject, computed } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthService as Auth0Service } from '@auth0/auth0-angular';
+import type { MoonBeatsUser } from '@models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly router = inject(Router);
 
-  private readonly _authState = signal<AuthState>({
-    isAuthenticated: false,
-    user: null,
+  private readonly auth0 = inject(Auth0Service);
+
+  readonly isAuthenticated = toSignal(this.auth0.isAuthenticated$, { initialValue: false });
+  readonly isLoading       = toSignal(this.auth0.isLoading$,       { initialValue: true  });
+
+  private readonly _auth0User = toSignal(this.auth0.user$, { initialValue: null });
+
+  readonly currentUser = computed((): MoonBeatsUser | null => {
+    const u = this._auth0User();
+    if (!u) return null;
+    return {
+      sub:     u.sub     ?? '',
+      name:    u.name    ?? 'User',
+      email:   u.email   ?? '',
+      picture: u.picture ?? '',
+      initial: (u.name ?? 'U').charAt(0).toUpperCase(),
+    };
   });
 
-  readonly isAuthenticated = computed(() => this._authState().isAuthenticated);
-  readonly currentUser     = computed(() => this._authState().user);
+  login(): void {
+    this.auth0.loginWithRedirect();
+  }
 
-  enterAsGuest(returnUrl = '/search'): void {
-    this._authState.set({ isAuthenticated: true, user: GUEST_USER });
-    void this.router.navigateByUrl(returnUrl);
+  loginWithGoogle(): void {
+    this.auth0.loginWithRedirect({
+      authorizationParams: { connection: 'google-oauth2' },
+    });
   }
 
   logout(): void {
-    this._authState.set({ isAuthenticated: false, user: null });
-    void this.router.navigate(['/']);
+    this.auth0.logout({
+      logoutParams: { returnTo: window.location.origin },
+    });
   }
 }
