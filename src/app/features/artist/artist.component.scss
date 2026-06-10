@@ -1,0 +1,112 @@
+.artist-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 6rem;
+  @media (max-width: 640px) { padding: 1.5rem 1rem 6rem; }
+}
+
+.artist-hero-skeleton { margin-bottom: 2rem; }
+
+.artist-hero {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+  @media (max-width: 640px) { flex-direction: column; }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #e8e6e0;
+    margin: 0 0 0.5rem;
+    line-height: 1.1;
+    @media (max-width: 640px) { font-size: 1.75rem; }
+  }
+
+  p { font-size: 0.88rem; color: #7a7890; margin: 0 0 0.25rem; }
+}
+
+.artist-image {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  @media (max-width: 640px) { width: 120px; height: 120px; }
+}
+
+.fan-count {
+  font-size: 0.82rem;
+  color: #7a7890;
+  margin: 0 0 0.25rem;
+}
+
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e8e6e0;
+  margin: 0 0 1rem;
+}
+
+.album-grid {
+  list-style: none;
+  margin: 0 0 3rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.25rem;
+}
+
+.album-card {
+  display: block;
+  text-decoration: none;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111118;
+  border: 1px solid #2a2a3a;
+  transition: border-color 0.15s, transform 0.15s;
+
+  &:hover { border-color: #c8a96e; transform: translateY(-2px); }
+}
+
+.album-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: #2a2a3a;
+}
+
+.album-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e8e6e0;
+  padding: 0.6rem 0.75rem 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-year {
+  font-size: 0.75rem;
+  color: #7a7890;
+  padding: 0 0.75rem 0.6rem;
+}
+
+.track-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #7a7890;
+}

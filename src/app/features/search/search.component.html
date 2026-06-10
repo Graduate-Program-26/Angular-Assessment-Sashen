@@ -1,0 +1,74 @@
+<main class="search-page" id="main-content">
+
+  <section class="search-header">
+    <h1 class="page-title">Search</h1>
+
+    <div class="search-input-wrap">
+      <label for="search-input" class="sr-only">Search for artists, tracks, or albums</label>
+      <input
+        id="search-input"
+        type="search"
+        class="search-input"
+        placeholder="Artists, tracks, albums…"
+        [value]="searchStore.searchQuery()"
+        (input)="handleSearchInput($event)"
+        autocomplete="off"
+        spellcheck="false"
+        [attr.aria-busy]="searchStore.isSearching()"
+      />
+      @if (searchStore.searchQuery().length > 0) {
+        <button
+          type="button"
+          class="clear-btn"
+          (click)="handleClearSearch()"
+          aria-label="Clear search"
+        >✕</button>
+      }
+    </div>
+  </section>
+
+  @if (searchStore.isSearching()) {
+    <section aria-label="Loading results" aria-live="polite">
+      @for (item of [1,2,3,4,5,6]; track item) {
+        <div class="track-skeleton">
+          <app-skeleton-loader width="40px" height="40px" borderRadius="6px" />
+          <div>
+            <app-skeleton-loader width="200px" height="14px" />
+            <app-skeleton-loader width="140px" height="12px" style="margin-top:6px" />
+          </div>
+        </div>
+      }
+    </section>
+
+  } @else if (searchStore.hasResults()) {
+    <section aria-label="Search results" aria-live="polite">
+      <p class="results-count">{{ searchStore.totalResults() }} results</p>
+      <ul class="track-list" role="list">
+        @for (track of searchStore.searchResults(); track track.id) {
+          <li>
+            <app-track-card [track]="track" />
+            <a
+              [routerLink]="['/artist', track.artist.id]"
+              class="artist-link"
+              [attr.aria-label]="'View artist: ' + track.artist.name"
+            >{{ track.artist.name }}</a>
+          </li>
+        }
+      </ul>
+    </section>
+
+  } @else if (searchStore.hasNoResults()) {
+    <section class="empty-state" aria-live="polite">
+      <p class="empty-icon" aria-hidden="true">🌑</p>
+      <p>No results for "<strong>{{ searchStore.searchQuery() }}</strong>"</p>
+      <p class="empty-sub">Try a different artist or track name.</p>
+    </section>
+
+  } @else if (searchStore.searchError()) {
+    <section class="error-state" role="alert">
+      <p>{{ searchStore.searchError() }}</p>
+      <button type="button" (click)="searchStore.updateSearchQuery(searchStore.searchQuery())">Retry</button>
+    </section>
+  }
+
+</main>

@@ -1,0 +1,211 @@
+.playlist-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 6rem;
+
+  @media (max-width: 640px) { padding: 1.5rem 1rem 6rem; }
+}
+
+.playlist-header { margin-bottom: 2rem; }
+
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #e8e6e0;
+  margin: 0 0 1.25rem;
+}
+
+.create-form {
+  display: flex;
+  gap: 0.75rem;
+  @media (max-width: 640px) { flex-direction: column; }
+}
+
+.playlist-name-input {
+  flex: 1;
+  background: #111118;
+  border: 1px solid #2a2a3a;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  color: #e8e6e0;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+
+  &::placeholder { color: #7a7890; }
+  &:focus { border-color: #c8a96e; }
+}
+
+.create-btn {
+  background: #c8a96e;
+  color: #0a0a0f;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1.25rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+
+  &:hover:not(:disabled) { opacity: 0.85; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+.loading-text { color: #7a7890; padding: 2rem 0; text-align: center; }
+
+.empty-state { text-align: center; padding: 4rem 1rem; color: #7a7890; }
+.empty-icon   { font-size: 3rem; margin: 0 0 1rem; }
+
+.playlist-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.playlist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: stretch;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: background 0.15s;
+
+  &:hover { background: #18181f; }
+  &--active {
+    background: rgba(200,169,110,0.1);
+    .playlist-name { color: #c8a96e; }
+  }
+}
+
+.playlist-select-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.playlist-name {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e8e6e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playlist-meta { display: block; font-size: 0.75rem; color: #7a7890; }
+
+.playlist-icon-btn {
+  background: none;
+  border: none;
+  color: #7a7890;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: color 0.15s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg { width: 14px; height: 14px; }
+
+  &:hover { color: #e8e6e0; }
+  &--danger:hover { color: #e05c5c; }
+}
+
+.rename-form { flex: 1; display: flex; }
+
+.rename-input {
+  flex: 1;
+  background: #0a0a0f;
+  border: 1px solid #c8a96e;
+  border-radius: 6px;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.88rem;
+  color: #e8e6e0;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  min-width: 0;
+}
+
+.detail-header { margin-bottom: 1.5rem; }
+
+.detail-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e8e6e0;
+  margin: 0 0 0.25rem;
+}
+
+.detail-meta { font-size: 0.85rem; color: #7a7890; margin: 0; }
+
+.track-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.empty-tracks, .select-prompt {
+  color: #7a7890;
+  font-size: 0.9rem;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.draggable-track {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 8px;
+  &:hover { background: #111118; }
+}
+
+.drag-handle {
+  flex-shrink: 0;
+  color: #7a7890;
+  cursor: grab;
+  padding: 0 0.25rem;
+  display: flex;
+  align-items: center;
+  &:active { cursor: grabbing; }
+  svg { width: 16px; height: 16px; }
+}
+
+.track-card-wrap { flex: 1; min-width: 0; }
+
+.remove-track-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #7a7890;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: color 0.15s, opacity 0.15s;
+
+  .draggable-track:hover & { opacity: 1; }
+  &:hover { color: #e05c5c; }
+}

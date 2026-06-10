@@ -1,0 +1,43 @@
+<main class="album-page" id="main-content">
+
+  @if (isLoading()) {
+    <app-skeleton-loader height="240px" borderRadius="12px" />
+
+  } @else if (loadError()) {
+    <div class="error-state" role="alert"><p>{{ loadError() }}</p></div>
+
+  } @else if (albumDetails()) {
+    @let album = albumDetails()!;
+
+    <header class="album-hero">
+      <img [src]="album.cover_big" [alt]="album.title" width="240" height="240" class="album-cover" />
+      <div class="album-meta">
+        <p class="album-type">{{ album.record_type }}</p>
+        <h1>{{ album.title }}</h1>
+        <a [routerLink]="['/artist', album.artist.id]" class="artist-link">
+          {{ album.artist.name }}
+        </a>
+        <p class="album-details">
+          {{ releaseYear() }} · {{ genreNames() }} · {{ album.duration | duration }}
+        </p>
+      </div>
+    </header>
+
+    <section aria-labelledby="tracklist-heading">
+      <h2 id="tracklist-heading">Tracks</h2>
+      <ul class="track-list" role="list">
+        @for (track of trackList(); track track.id; let trackIndex = $index) {
+          <li>
+            <app-track-card
+              [track]="track"
+              [trackNumber]="trackIndex + 1"
+            />
+          </li>
+        } @empty {
+          <li class="empty-state">No tracks available.</li>
+        }
+      </ul>
+    </section>
+  }
+
+</main>

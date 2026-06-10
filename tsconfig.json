@@ -3,17 +3,40 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    /* Core strict flags — all required */
     "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
+
+    /* Angular-required flags */
     "experimentalDecorators": true,
-    "importHelpers": true,
+    "emitDecoratorMetadata": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "useDefineForClassFields": false,
+    "importHelpers": true,
+
+    /* Path aliases — import from @core, @shared, etc. */
+    "paths": {
+      "@core/*":     ["./src/app/core/*"],
+      "@features/*": ["./src/app/features/*"],
+      "@shared/*":   ["./src/app/shared/*"],
+      "@models/*":   ["./src/app/models/*"],
+      "@store/*":    ["./src/app/store/*"],
+      "@guards/*":   ["./src/app/guards/*"]
+    },
+
+    /* Output */
+    "lib": ["ES2022", "dom"],
+    "skipLibCheck": true,
+    "esModuleInterop": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

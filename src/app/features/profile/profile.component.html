@@ -1,0 +1,56 @@
+<main class="profile-page" id="main-content">
+
+  <header class="profile-header">
+    @if (authService.currentUser(); as user) {
+      @if (user.picture) {
+        <img
+          class="avatar avatar--photo"
+          [src]="user.picture"
+          [alt]="user.name + ' avatar'"
+          width="80" height="80"
+          referrerpolicy="no-referrer"
+        />
+      } @else {
+        <div class="avatar" aria-hidden="true">{{ user.initial }}</div>
+      }
+      <h1>{{ user.name }}</h1>
+      <p class="profile-sub">{{ user.email }}</p>
+    }
+
+    <button type="button" class="logout-btn" (click)="authService.logout()">
+      Sign out
+    </button>
+  </header>
+
+  <section class="stats-grid" aria-labelledby="stats-heading">
+    <h2 id="stats-heading" class="sr-only">Your listening stats</h2>
+
+    <div class="stat-card">
+      <p class="stat-value">{{ likedStore.likedCount() }}</p>
+      <p class="stat-label">Liked songs</p>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-value">{{ playlistStore.playlistCount() }}</p>
+      <p class="stat-label">Playlists</p>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-value">{{ playlistStore.totalTrackCount() }}</p>
+      <p class="stat-label">Tracks saved</p>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-value">{{ totalListeningTimeSec() | duration }}</p>
+      <p class="stat-label">Listening time</p>
+    </div>
+
+    @if (topArtist()) {
+      <div class="stat-card stat-card--wide">
+        <p class="stat-value">{{ topArtist() }}</p>
+        <p class="stat-label">Most played artist</p>
+      </div>
+    }
+  </section>
+
+</main>

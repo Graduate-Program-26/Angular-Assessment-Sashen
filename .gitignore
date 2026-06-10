@@ -42,3 +42,12 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment — never commit real credentials
+.env
+src/environments/
+
+# guides
+/guides
+
+# screenshots/ folder is tracked — manual UI screenshots committed to repo
