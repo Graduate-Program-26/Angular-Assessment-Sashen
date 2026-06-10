@@ -45,6 +45,7 @@ Thumbs.db
 
 # Environment — never commit real credentials
 .env
+src/environments/
 
 # guides
 /guides

@@ -50,17 +50,19 @@
       @if (authService.isAuthenticated()) {
         @let currentUser = authService.currentUser();
         @if (currentUser) {
-          @if (currentUser.picture) {
-            <img
-              class="user-avatar user-avatar--photo"
-              [src]="currentUser.picture"
-              [alt]="currentUser.name"
-              width="32" height="32"
-              referrerpolicy="no-referrer"
-            />
-          } @else {
-            <span class="user-avatar" aria-hidden="true">{{ currentUser.initial }}</span>
-          }
+          <a routerLink="/profile" class="user-avatar-link" aria-label="Your profile">
+            @if (currentUser.picture) {
+              <img
+                class="user-avatar user-avatar--photo"
+                [src]="currentUser.picture"
+                [alt]="currentUser.name"
+                width="32" height="32"
+                referrerpolicy="no-referrer"
+              />
+            } @else {
+              <span class="user-avatar" aria-hidden="true">{{ currentUser.initial }}</span>
+            }
+          </a>
         }
         <button
           type="button"
