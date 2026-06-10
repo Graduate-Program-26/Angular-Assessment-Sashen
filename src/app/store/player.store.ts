@@ -91,10 +91,10 @@ export class PlayerStore {
       this._queueIndex.set(queue.findIndex((t) => t.id === track.id));
     }
     this.audioElement.src = track.preview;
-    this.audioElement.load();
     this._currentTrack.set(track);
     this._currentTimeMs.set(0);
     this._isPlaying.set(true);
+    void this.audioElement.play();
   }
 
   playNext(): void {
