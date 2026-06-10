@@ -1,10 +1,12 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import type { DeezerTrack } from '@models/track.model';
+import { RecentlyPlayedStore } from '@store/recently-played.store';
 
 const VOLUME_STORAGE_KEY = 'moonbeats_volume';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerStore {
+  private readonly recentStore = inject(RecentlyPlayedStore);
 
   // Private state signals
   private readonly _currentTrack = signal<DeezerTrack | null>(null);
@@ -95,6 +97,7 @@ export class PlayerStore {
     this._currentTimeMs.set(0);
     this._isPlaying.set(true);
     void this.audioElement.play();
+    this.recentStore.addTrack(track);
   }
 
   playNext(): void {
